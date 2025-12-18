@@ -10,18 +10,22 @@
 **Duration:** 16 Weeks  
 **Format:** Online  
 **Schedule:** One day per week, 2 -3 hours per session  
-**Start Date:** Saturday (6:30pm) on 20-12-2025  
+**Start Date:** Every Saturday (6:30pm) From 20-12-2025  
 **Prerequisites:** Basic programming knowledge (especially Java)
+**Batch:** 25 
+**Semester:** 6
+**ចំនួនក្រេឌីត៖** ៣ = ៤៥ម៉ោង (សិក្សាទ្រឹស្ដី ២២.៥ ម៉ោង និងអនុវត្ត ២២.៥ ម៉ោង)
+
 
 ---
 
 ## 👨‍🏫 Instructor Information
 
 **Instructor:** SET YUTH  
+**Telegram:** https://t.me/setyuth  
 **Email:** set.yuth@gmail.com  
-**Office Hours:** Available via Google Meet  
 **Response Time:** Within 24-48 hours  
-**Communication:** Email, IIC E-Learning Forum, Google Meet
+**Communication:** Telegram, IIC E-Learning Forum, Google Meet
 
 ---
 
@@ -434,10 +438,11 @@ All software is free and open-source:
 
 | Component | Weight | Description |
 |-----------|--------|-------------|
-| Weekly Hands-on Exercises | 20% | Completion and quality of weekly projects |
-| Mid-Course Project (Week 8) | 20% | Library Management System |
-| Final Project (Weeks 14-15) | 35% | Spring Boot Web Application |
-| Final Exam (Week 16) | 25% | Comprehensive written exam |
+| Weekly Hands-on Exercises | 5% | Completion and quality of weekly projects |
+| Class Attendance | 10% | Pay Attention during class (Q&A) |
+| Mid-Course Project (Week 8) | 10% | Library Management System |
+| Final Project (Weeks 14-15) | 25% | Spring Boot Web Application |
+| Final Exam (Week 16) | 50% | Comprehensive written exam |
 | **Total** | **100%** | |
 
 ### Grading Scale:
@@ -612,8 +617,9 @@ This course prepares students for:
 ## 📞 Contact Information
 
 **Instructor:** Set Yuth  
+**Telegram:** https://t.me/setyuth  
 **Email:** set.yuth@gmail.com  
-**Office Hours:** Saturday (6:30 pm) 
+**Class Hours:** Saturday (6:30 pm)  
 **Course Website:** http://elearning.iic.edu.kh/course/view.php?id=1139  
 **Discussion Forum:** http://elearning.iic.edu.kh/course/view.php?id=1139  
 **Google Meet Link:** Will be provided
