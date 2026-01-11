@@ -96,21 +96,23 @@ public class Animal {
 ```
 
 ```java
+import Inheritance.Animal;
+
 // Child class (Derived class / Subclass)
 public class Dog extends Animal {
     private String breed;
-    
+
     // Constructor
     public Dog(String name, int age, String breed) {
         super(name, age);  // Call parent constructor
         this.breed = breed;
     }
-    
+
     // Dog-specific method
     public void bark() {
         System.out.println(name + " says: Woof! Woof!");
     }
-    
+
     // Override parent method
     @Override
     public void displayInfo() {
@@ -122,19 +124,21 @@ public class Dog extends Animal {
 ```
 
 ```java
+import Inheritance.Animal;
+
 // Another child class
 public class Cat extends Animal {
     private String color;
-    
+
     public Cat(String name, int age, String color) {
         super(name, age);
         this.color = color;
     }
-    
+
     public void meow() {
         System.out.println(name + " says: Meow!");
     }
-    
+
     @Override
     public void displayInfo() {
         super.displayInfo();
@@ -147,6 +151,9 @@ public class Cat extends Animal {
 **Using the classes:**
 
 ```java
+import Inheritance.Cat;
+import Inheritance.Dog;
+
 public class Main {
     public static void main(String[] args) {
         // Create a Dog object
@@ -155,9 +162,9 @@ public class Main {
         dog.eat();      // Inherited from Animal
         dog.sleep();    // Inherited from Animal
         dog.bark();     // Dog-specific method
-        
+
         System.out.println("\n" + "=".repeat(30) + "\n");
-        
+
         // Create a Cat object
         Cat cat = new Cat("Whiskers", 2, "Orange");
         cat.displayInfo();
@@ -227,23 +234,25 @@ public class Person {
 ```
 
 ```java
+import Inheritance.Person;
+
 public class Student extends Person {
     private String studentId;
     private double gpa;
-    
+
     public Student(String name, int age, String studentId, double gpa) {
         super(name, age);  // 1. Call parent constructor
         this.studentId = studentId;
         this.gpa = gpa;
     }
-    
+
     @Override
     public void introduce() {
         super.introduce();  // 2. Call parent method
         System.out.println("I'm a student with ID: " + studentId);
         System.out.println("My GPA is: " + gpa);
     }
-    
+
     public void study() {
         // 3. Access parent attribute
         System.out.println(super.name + " is studying hard!");
@@ -743,18 +752,20 @@ public abstract class Person {
 #### Step 2: Student Class
 
 ```java
+import Inheritance.Person;
+
 public class Student extends Person {
     private String major;
     private double gpa;
     private int creditsCompleted;
-    
+
     public Student(String name, int age, String id, String email, String major, double gpa) {
         super(name, age, id, email);
         this.major = major;
         setGpa(gpa);
         this.creditsCompleted = 0;
     }
-    
+
     @Override
     public void displayInfo() {
         System.out.println("╔══════════════════════════════════════╗");
@@ -769,16 +780,16 @@ public class Student extends Person {
         System.out.println("Credits Completed: " + creditsCompleted);
         System.out.println("Status: " + getAcademicStatus());
     }
-    
+
     @Override
     public String getRole() {
         return "Student";
     }
-    
+
     public double getGpa() {
         return gpa;
     }
-    
+
     public void setGpa(double gpa) {
         if (gpa >= 0.0 && gpa <= 4.0) {
             this.gpa = gpa;
@@ -787,30 +798,30 @@ public class Student extends Person {
             this.gpa = 0.0;
         }
     }
-    
+
     public String getMajor() {
         return major;
     }
-    
+
     public void setMajor(String major) {
         this.major = major;
     }
-    
+
     public int getCreditsCompleted() {
         return creditsCompleted;
     }
-    
+
     public void addCredits(int credits) {
         if (credits > 0) {
             this.creditsCompleted += credits;
             System.out.println("Added " + credits + " credits. Total: " + creditsCompleted);
         }
     }
-    
+
     public boolean isHonorRoll() {
         return gpa >= 3.5;
     }
-    
+
     public String getAcademicStatus() {
         if (creditsCompleted < 30) return "Freshman";
         else if (creditsCompleted < 60) return "Sophomore";
@@ -825,13 +836,15 @@ public class Student extends Person {
 #### Step 3: Teacher Class
 
 ```java
+import Inheritance.Person;
+
 public class Teacher extends Person {
     private String department;
     private String subject;
     private double salary;
     private int yearsOfExperience;
-    
-    public Teacher(String name, int age, String id, String email, 
+
+    public Teacher(String name, int age, String id, String email,
                    String department, String subject, double salary, int yearsOfExperience) {
         super(name, age, id, email);
         this.department = department;
@@ -839,7 +852,7 @@ public class Teacher extends Person {
         this.salary = salary;
         this.yearsOfExperience = yearsOfExperience;
     }
-    
+
     @Override
     public void displayInfo() {
         System.out.println("╔══════════════════════════════════════╗");
@@ -855,40 +868,40 @@ public class Teacher extends Person {
         System.out.println("Years of Experience: " + yearsOfExperience);
         System.out.println("Level: " + getTeacherLevel());
     }
-    
+
     @Override
     public String getRole() {
         return "Teacher";
     }
-    
+
     public String getDepartment() {
         return department;
     }
-    
+
     public String getSubject() {
         return subject;
     }
-    
+
     public double getSalary() {
         return salary;
     }
-    
+
     public void setSalary(double salary) {
         if (salary > 0) {
             this.salary = salary;
         }
     }
-    
+
     public void giveRaise(double percentage) {
         double raise = salary * (percentage / 100);
         salary += raise;
         System.out.println("Salary increased by " + percentage + "%. New salary: $" + salary);
     }
-    
+
     public int getYearsOfExperience() {
         return yearsOfExperience;
     }
-    
+
     public String getTeacherLevel() {
         if (yearsOfExperience < 3) return "Junior Teacher";
         else if (yearsOfExperience < 10) return "Senior Teacher";
@@ -902,19 +915,21 @@ public class Teacher extends Person {
 #### Step 4: Admin Class
 
 ```java
+import Inheritance.Person;
+
 public class Admin extends Person {
     private String position;
     private String department;
     private String[] permissions;
-    
-    public Admin(String name, int age, String id, String email, 
+
+    public Admin(String name, int age, String id, String email,
                  String position, String department, String[] permissions) {
         super(name, age, id, email);
         this.position = position;
         this.department = department;
         this.permissions = permissions;
     }
-    
+
     @Override
     public void displayInfo() {
         System.out.println("╔══════════════════════════════════════╗");
@@ -933,16 +948,16 @@ public class Admin extends Person {
         }
         System.out.println();
     }
-    
+
     @Override
     public String getRole() {
         return "Admin";
     }
-    
+
     public String getPosition() {
         return position;
     }
-    
+
     public boolean hasPermission(String permission) {
         for (String perm : permissions) {
             if (perm.equalsIgnoreCase(permission)) {
@@ -951,7 +966,7 @@ public class Admin extends Person {
         }
         return false;
     }
-    
+
     public void listPermissions() {
         System.out.println("Permissions for " + name + ":");
         for (String permission : permissions) {
@@ -966,18 +981,21 @@ public class Admin extends Person {
 #### Step 5: University Management System
 
 ```java
+import Inheritance.Person;
+import Inheritance.Student;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class UniversityManagementSystem {
     private ArrayList<Person> people;
     private Scanner scanner;
-    
+
     public UniversityManagementSystem() {
         people = new ArrayList<>();
         scanner = new Scanner(System.in);
     }
-    
+
     public void displayMenu() {
         System.out.println("\n╔════════════════════════════════════════╗");
         System.out.println("║   UNIVERSITY MANAGEMENT SYSTEM         ║");
@@ -993,7 +1011,7 @@ public class UniversityManagementSystem {
         System.out.println("─────────────────────────────────────────");
         System.out.print("Enter your choice (1-8): ");
     }
-    
+
     public void addStudent() {
         System.out.println("\n--- Add New Student ---");
         System.out.print("Name: ");
@@ -1010,12 +1028,12 @@ public class UniversityManagementSystem {
         System.out.print("GPA (0.0-4.0): ");
         double gpa = scanner.nextDouble();
         scanner.nextLine();
-        
+
         Student student = new Student(name, age, id, email, major, gpa);
         people.add(student);
         System.out.println("✓ Student added successfully!");
     }
-    
+
     public void addTeacher() {
         System.out.println("\n--- Add New Teacher ---");
         System.out.print("Name: ");
@@ -1036,12 +1054,12 @@ public class UniversityManagementSystem {
         System.out.print("Years of Experience: ");
         int experience = scanner.nextInt();
         scanner.nextLine();
-        
+
         Teacher teacher = new Teacher(name, age, id, email, department, subject, salary, experience);
         people.add(teacher);
         System.out.println("✓ Teacher added successfully!");
     }
-    
+
     public void addAdmin() {
         System.out.println("\n--- Add New Admin ---");
         System.out.print("Name: ");
@@ -1060,25 +1078,25 @@ public class UniversityManagementSystem {
         System.out.print("Number of permissions: ");
         int numPerms = scanner.nextInt();
         scanner.nextLine();
-        
+
         String[] permissions = new String[numPerms];
         for (int i = 0; i < numPerms; i++) {
             System.out.print("Permission " + (i + 1) + ": ");
             permissions[i] = scanner.nextLine();
         }
-        
+
         Admin admin = new Admin(name, age, id, email, position, department, permissions);
         people.add(admin);
         System.out.println("✓ Admin added successfully!");
     }
-    
+
     public void displayAllPeople() {
         System.out.println("\n--- All People in System ---");
         if (people.isEmpty()) {
             System.out.println("No people in the system.");
             return;
         }
-        
+
         for (int i = 0; i < people.size(); i++) {
             System.out.println("\nPerson #" + (i + 1) + " [" + people.get(i).getRole() + "]");
             people.get(i).displayInfo();
@@ -1086,12 +1104,12 @@ public class UniversityManagementSystem {
         }
         System.out.println("Total people: " + people.size());
     }
-    
+
     public void searchById() {
         System.out.println("\n--- Search Person by ID ---");
         System.out.print("Enter ID: ");
         String searchId = scanner.nextLine();
-        
+
         boolean found = false;
         for (Person person : people) {
             if (person.getId().equalsIgnoreCase(searchId)) {
@@ -1101,12 +1119,12 @@ public class UniversityManagementSystem {
                 break;
             }
         }
-        
+
         if (!found) {
             System.out.println("✗ Person not found.");
         }
     }
-    
+
     public void displayByRole() {
         System.out.println("\n--- Filter by Role ---");
         System.out.println("1. Students only");
@@ -1115,17 +1133,23 @@ public class UniversityManagementSystem {
         System.out.print("Choose (1-3): ");
         int choice = scanner.nextInt();
         scanner.nextLine();
-        
+
         String roleFilter = "";
         switch (choice) {
-            case 1: roleFilter = "Student"; break;
-            case 2: roleFilter = "Teacher"; break;
-            case 3: roleFilter = "Admin"; break;
-            default: 
+            case 1:
+                roleFilter = "Student";
+                break;
+            case 2:
+                roleFilter = "Teacher";
+                break;
+            case 3:
+                roleFilter = "Admin";
+                break;
+            default:
                 System.out.println("Invalid choice!");
                 return;
         }
-        
+
         System.out.println("\n--- " + roleFilter + "s ---");
         int count = 0;
         for (Person person : people) {
@@ -1135,18 +1159,18 @@ public class UniversityManagementSystem {
                 count++;
             }
         }
-        
+
         if (count == 0) {
             System.out.println("No " + roleFilter.toLowerCase() + "s found.");
         } else {
             System.out.println("Total " + roleFilter.toLowerCase() + "s: " + count);
         }
     }
-    
+
     public void displayHonorRoll() {
         System.out.println("\n--- Honor Roll Students (GPA >= 3.5) ---");
         int count = 0;
-        
+
         for (Person person : people) {
             // Use instanceof to check object type
             if (person instanceof Student) {
@@ -1158,23 +1182,23 @@ public class UniversityManagementSystem {
                 }
             }
         }
-        
+
         if (count == 0) {
             System.out.println("No students on honor roll.");
         } else {
             System.out.println("Total honor roll students: " + count);
         }
     }
-    
+
     public void run() {
         System.out.println("Welcome to University Management System!");
-        
+
         int choice;
         do {
             displayMenu();
             choice = scanner.nextInt();
             scanner.nextLine();
-            
+
             switch (choice) {
                 case 1:
                     addStudent();
@@ -1204,12 +1228,12 @@ public class UniversityManagementSystem {
                 default:
                     System.out.println("\n✗ Invalid choice! Please enter 1-8.");
             }
-            
+
         } while (choice != 8);
-        
+
         scanner.close();
     }
-    
+
     public static void main(String[] args) {
         UniversityManagementSystem ums = new UniversityManagementSystem();
         ums.run();
@@ -1282,7 +1306,10 @@ public Student(String name, int age) {
 **Solution:** Add `super(name, age, ...);` as first line
 
 ### Error 2: Trying to instantiate abstract class
+
 ```java
+import Inheritance.Person;
+
 Person p = new Person(...);  // Error!
 ```
 **Solution:** Use concrete subclass: `Person p = new Student(...);`
