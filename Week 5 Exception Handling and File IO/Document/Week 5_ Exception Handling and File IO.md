@@ -437,25 +437,25 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class FileReadingDemo {
-    public static void main(String[] args) {
-        // Method 1: Using Scanner
-        try {
-            File file = new File("data.txt");
-            Scanner fileScanner = new Scanner(file);
-            
-            System.out.println("=== Reading File ===");
-            while (fileScanner.hasNextLine()) {
-                String line = fileScanner.nextLine();
-                System.out.println(line);
-            }
-            
-            fileScanner.close();
-            
-        } catch (FileNotFoundException e) {
-            System.out.println("Error: File not found!");
-            System.out.println("Please create 'data.txt' in the project directory.");
-        }
-    }
+   public static void main(String[] args) {
+      // Method 1: Using Scanner
+      try {
+         File file = new File("data.txt");
+         Scanner fileScanner = new Scanner(file);
+
+         System.out.println("=== Reading File ===");
+         while (fileScanner.hasNextLine()) {
+            String line = fileScanner.nextLine();
+            System.out.println(line);
+         }
+
+         fileScanner.close();
+
+      } catch (FileNotFoundException e) {
+         System.out.println("Error: File not found!");
+         System.out.println("Please create 'data.txt' in the project directory.");
+      }
+   }
 }
 ```
 
@@ -583,46 +583,46 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class TryWithResourcesDemo {
-    
-    // Old way (verbose)
-    public static void readFileOldWay(String filename) {
-        BufferedReader reader = null;
-        try {
-            reader = new BufferedReader(new FileReader(filename));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                System.out.println(line);
+
+   // Old way (verbose)
+   public static void readFileOldWay(String filename) {
+      BufferedReader reader = null;
+      try {
+         reader = new BufferedReader(new FileReader(filename));
+         String line;
+         while ((line = reader.readLine()) != null) {
+            System.out.println(line);
+         }
+      } catch (IOException e) {
+         System.out.println("Error: " + e.getMessage());
+      } finally {
+         try {
+            if (reader != null) {
+               reader.close();
             }
-        } catch (IOException e) {
-            System.out.println("Error: " + e.getMessage());
-        } finally {
-            try {
-                if (reader != null) {
-                    reader.close();
-                }
-            } catch (IOException e) {
-                System.out.println("Error closing: " + e.getMessage());
-            }
-        }
-    }
-    
-    // New way (cleaner with try-with-resources)
-    public static void readFileNewWay(String filename) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                System.out.println(line);
-            }
-        } catch (IOException e) {
-            System.out.println("Error: " + e.getMessage());
-        }
-        // Resource is automatically closed!
-    }
-    
-    public static void main(String[] args) {
-        System.out.println("=== Reading with try-with-resources ===");
-        readFileNewWay("data.txt");
-    }
+         } catch (IOException e) {
+            System.out.println("Error closing: " + e.getMessage());
+         }
+      }
+   }
+
+   // New way (cleaner with try-with-resources)
+   public static void readFileNewWay(String filename) {
+      try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+         String line;
+         while ((line = reader.readLine()) != null) {
+            System.out.println(line);
+         }
+      } catch (IOException e) {
+         System.out.println("Error: " + e.getMessage());
+      }
+      // Resource is automatically closed!
+   }
+
+   public static void main(String[] args) {
+      System.out.println("=== Reading with try-with-resources ===");
+      readFileNewWay("data.txt");
+   }
 }
 ```
 
@@ -1360,6 +1360,7 @@ Students should be able to:
 ## 🔧 Common Student Errors & Solutions
 
 ### Error 1: File Not Found
+
 ```java
 File file = new File("data.txt");  // Wrong path!
 ```
