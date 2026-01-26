@@ -1,6 +1,6 @@
-package HANDS_ON_PROJECT;
+package Homework_Assignment;
 
 // Interface for comparable entities (for sorting)
-public interface Comparable<T> {
+public interface CustomComparable<T> {
     int compareTo(T other);
 }
