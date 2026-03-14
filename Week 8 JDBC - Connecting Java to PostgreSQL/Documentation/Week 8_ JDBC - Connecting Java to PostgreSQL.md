@@ -356,6 +356,8 @@ pstmt.setString(1, userInput);  // Parameters are safely escaped
 **Example 1: Reading All Students**
 
 ```java
+import Demo.DatabaseConfig;
+
 import java.sql.*;
 
 public class SelectAllStudents {
@@ -363,24 +365,24 @@ public class SelectAllStudents {
         Connection connection = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
-        
+
         try {
             // 1. Get database connection
             connection = DatabaseConfig.getConnection();
-            
+
             // 2. Prepare SQL query
             String sql = "SELECT student_id, name, age, email, major, gpa FROM students ORDER BY name";
             pstmt = connection.prepareStatement(sql);
-            
+
             // 3. Execute query and get results
             rs = pstmt.executeQuery();
-            
+
             // 4. Process the ResultSet
             System.out.println("=== All Students ===");
             System.out.printf("%-10s %-20s %-5s %-25s %-20s %-5s\n",
-                "ID", "Name", "Age", "Email", "Major", "GPA");
+                    "ID", "Name", "Age", "Email", "Major", "GPA");
             System.out.println("-".repeat(90));
-            
+
             int count = 0;
             while (rs.next()) {
                 // Get data from current row
@@ -390,16 +392,16 @@ public class SelectAllStudents {
                 String email = rs.getString("email");
                 String major = rs.getString("major");
                 double gpa = rs.getDouble("gpa");
-                
+
                 // Display the data
                 System.out.printf("%-10s %-20s %-5d %-25s %-20s %.2f\n",
-                    id, name, age, email, major, gpa);
+                        id, name, age, email, major, gpa);
                 count++;
             }
-            
+
             System.out.println("-".repeat(90));
             System.out.println("Total students: " + count);
-            
+
         } catch (SQLException e) {
             System.out.println("✗ Error executing query!");
             System.out.println("Error: " + e.getMessage());
@@ -435,27 +437,29 @@ boolean isLast = rs.isLast();    // Check if on last row
 **Example 2: SELECT with Parameters**
 
 ```java
+import Demo.DatabaseConfig;
+
 public class SelectWithParameters {
-    
+
     // Find student by ID
     public static void findStudentById(String studentId) {
         Connection connection = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
-        
+
         try {
             connection = DatabaseConfig.getConnection();
-            
+
             // SQL with parameter placeholder (?)
             String sql = "SELECT * FROM students WHERE student_id = ?";
             pstmt = connection.prepareStatement(sql);
-            
+
             // Set parameter value (index starts at 1)
             pstmt.setString(5, student.getMajor());
             pstmt.setDouble(6, student.getGpa());
-            
+
             return pstmt.executeUpdate() > 0;
-            
+
         } catch (SQLException e) {
             System.out.println("Error adding student: " + e.getMessage());
             return false;
@@ -463,108 +467,108 @@ public class SelectWithParameters {
             DatabaseConfig.closeResources(conn, pstmt, null);
         }
     }
-    
+
     @Override
     public Student getStudentById(String studentId) {
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
-        
+
         try {
             conn = DatabaseConfig.getConnection();
             String sql = "SELECT * FROM students WHERE student_id = ?";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, studentId);
             rs = pstmt.executeQuery();
-            
+
             if (rs.next()) {
                 return extractStudentFromResultSet(rs);
             }
-            
+
         } catch (SQLException e) {
             System.out.println("Error getting student: " + e.getMessage());
         } finally {
             DatabaseConfig.closeResources(conn, pstmt, rs);
         }
-        
+
         return null;
     }
-    
+
     @Override
     public List<Student> getAllStudents() {
         List<Student> students = new ArrayList<>();
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
-        
+
         try {
             conn = DatabaseConfig.getConnection();
             String sql = "SELECT * FROM students ORDER BY name";
             pstmt = conn.prepareStatement(sql);
             rs = pstmt.executeQuery();
-            
+
             while (rs.next()) {
                 students.add(extractStudentFromResultSet(rs));
             }
-            
+
         } catch (SQLException e) {
             System.out.println("Error getting students: " + e.getMessage());
         } finally {
             DatabaseConfig.closeResources(conn, pstmt, rs);
         }
-        
+
         return students;
     }
-    
+
     // Helper method to extract Student object from ResultSet
     private Student extractStudentFromResultSet(ResultSet rs) throws SQLException {
         return new Student(
-            rs.getString("student_id"),
-            rs.getString("name"),
-            rs.getInt("age"),
-            rs.getString("email"),
-            rs.getString("major"),
-            rs.getDouble("gpa")
+                rs.getString("student_id"),
+                rs.getString("name"),
+                rs.getInt("age"),
+                rs.getString("email"),
+                rs.getString("major"),
+                rs.getDouble("gpa")
         );
     }
-    
+
     // Other methods will be implemented in hands-on project...
     @Override
     public List<Student> getStudentsByMajor(String major) {
         // Students will implement this
         return new ArrayList<>();
     }
-    
+
     @Override
     public List<Student> getHonorRollStudents(double minGpa) {
         // Students will implement this
         return new ArrayList<>();
     }
-    
+
     @Override
     public boolean updateStudent(Student student) {
         // Students will implement this
         return false;
     }
-    
+
     @Override
     public boolean updateGPA(String studentId, double newGpa) {
         // Students will implement this
         return false;
     }
-    
+
     @Override
     public boolean deleteStudent(String studentId) {
         // Students will implement this
         return false;
     }
-    
+
     @Override
     public int getStudentCount() {
         // Students will implement this
         return 0;
     }
-    
+
     @Override
     public double getAverageGPA() {
         // Students will implement this
@@ -606,30 +610,32 @@ StudentManagementJDBC/
 **Students should complete these methods in StudentDAOImpl:**
 
 ```java
+import Demo.DatabaseConfig;
+
 @Override
 public List<Student> getStudentsByMajor(String major) {
     List<Student> students = new ArrayList<>();
     Connection conn = null;
     PreparedStatement pstmt = null;
     ResultSet rs = null;
-    
+
     try {
         conn = DatabaseConfig.getConnection();
         String sql = "SELECT * FROM students WHERE major = ? ORDER BY gpa DESC";
         pstmt = conn.prepareStatement(sql);
         pstmt.setString(1, major);
         rs = pstmt.executeQuery();
-        
+
         while (rs.next()) {
             students.add(extractStudentFromResultSet(rs));
         }
-        
+
     } catch (SQLException e) {
         System.out.println("Error: " + e.getMessage());
     } finally {
         DatabaseConfig.closeResources(conn, pstmt, rs);
     }
-    
+
     return students;
 }
 
@@ -639,24 +645,24 @@ public List<Student> getHonorRollStudents(double minGpa) {
     Connection conn = null;
     PreparedStatement pstmt = null;
     ResultSet rs = null;
-    
+
     try {
         conn = DatabaseConfig.getConnection();
         String sql = "SELECT * FROM students WHERE gpa >= ? ORDER BY gpa DESC";
         pstmt = conn.prepareStatement(sql);
         pstmt.setDouble(1, minGpa);
         rs = pstmt.executeQuery();
-        
+
         while (rs.next()) {
             students.add(extractStudentFromResultSet(rs));
         }
-        
+
     } catch (SQLException e) {
         System.out.println("Error: " + e.getMessage());
     } finally {
         DatabaseConfig.closeResources(conn, pstmt, rs);
     }
-    
+
     return students;
 }
 
@@ -664,12 +670,12 @@ public List<Student> getHonorRollStudents(double minGpa) {
 public boolean updateStudent(Student student) {
     Connection conn = null;
     PreparedStatement pstmt = null;
-    
+
     try {
         conn = DatabaseConfig.getConnection();
         String sql = "UPDATE students SET name = ?, age = ?, email = ?, " +
-                    "major = ?, gpa = ? WHERE student_id = ?";
-        
+                "major = ?, gpa = ? WHERE student_id = ?";
+
         pstmt = conn.prepareStatement(sql);
         pstmt.setString(1, student.getName());
         pstmt.setInt(2, student.getAge());
@@ -677,9 +683,9 @@ public boolean updateStudent(Student student) {
         pstmt.setString(4, student.getMajor());
         pstmt.setDouble(5, student.getGpa());
         pstmt.setString(6, student.getStudentId());
-        
+
         return pstmt.executeUpdate() > 0;
-        
+
     } catch (SQLException e) {
         System.out.println("Error updating student: " + e.getMessage());
         return false;
@@ -692,16 +698,16 @@ public boolean updateStudent(Student student) {
 public boolean updateGPA(String studentId, double newGpa) {
     Connection conn = null;
     PreparedStatement pstmt = null;
-    
+
     try {
         conn = DatabaseConfig.getConnection();
         String sql = "UPDATE students SET gpa = ? WHERE student_id = ?";
         pstmt = conn.prepareStatement(sql);
         pstmt.setDouble(1, newGpa);
         pstmt.setString(2, studentId);
-        
+
         return pstmt.executeUpdate() > 0;
-        
+
     } catch (SQLException e) {
         System.out.println("Error updating GPA: " + e.getMessage());
         return false;
@@ -714,15 +720,15 @@ public boolean updateGPA(String studentId, double newGpa) {
 public boolean deleteStudent(String studentId) {
     Connection conn = null;
     PreparedStatement pstmt = null;
-    
+
     try {
         conn = DatabaseConfig.getConnection();
         String sql = "DELETE FROM students WHERE student_id = ?";
         pstmt = conn.prepareStatement(sql);
         pstmt.setString(1, studentId);
-        
+
         return pstmt.executeUpdate() > 0;
-        
+
     } catch (SQLException e) {
         System.out.println("Error deleting student: " + e.getMessage());
         return false;
@@ -736,23 +742,23 @@ public int getStudentCount() {
     Connection conn = null;
     PreparedStatement pstmt = null;
     ResultSet rs = null;
-    
+
     try {
         conn = DatabaseConfig.getConnection();
         String sql = "SELECT COUNT(*) as count FROM students";
         pstmt = conn.prepareStatement(sql);
         rs = pstmt.executeQuery();
-        
+
         if (rs.next()) {
             return rs.getInt("count");
         }
-        
+
     } catch (SQLException e) {
         System.out.println("Error: " + e.getMessage());
     } finally {
         DatabaseConfig.closeResources(conn, pstmt, rs);
     }
-    
+
     return 0;
 }
 
@@ -761,23 +767,23 @@ public double getAverageGPA() {
     Connection conn = null;
     PreparedStatement pstmt = null;
     ResultSet rs = null;
-    
+
     try {
         conn = DatabaseConfig.getConnection();
         String sql = "SELECT AVG(gpa) as avg_gpa FROM students WHERE gpa IS NOT NULL";
         pstmt = conn.prepareStatement(sql);
         rs = pstmt.executeQuery();
-        
+
         if (rs.next()) {
             return rs.getDouble("avg_gpa");
         }
-        
+
     } catch (SQLException e) {
         System.out.println("Error: " + e.getMessage());
     } finally {
         DatabaseConfig.closeResources(conn, pstmt, rs);
     }
-    
+
     return 0.0;
 }
 ```
@@ -789,18 +795,20 @@ public double getAverageGPA() {
 **Complete StudentManagementApp.java:**
 
 ```java
+import Demo.DatabaseConfig;
+
 import java.util.List;
 import java.util.Scanner;
 
 public class StudentManagementApp {
     private StudentDAO studentDAO;
     private Scanner scanner;
-    
+
     public StudentManagementApp() {
         this.studentDAO = new StudentDAOImpl();
         this.scanner = new Scanner(System.in);
     }
-    
+
     public void displayMenu() {
         System.out.println("\n╔════════════════════════════════════════╗");
         System.out.println("║   STUDENT MANAGEMENT SYSTEM (JDBC)     ║");
@@ -818,77 +826,77 @@ public class StudentManagementApp {
         System.out.println("─────────────────────────────────────────");
         System.out.print("Enter choice (1-10): ");
     }
-    
+
     public void addStudent() {
         System.out.println("\n--- Add New Student ---");
-        
+
         try {
             System.out.print("Student ID: ");
             String id = scanner.nextLine();
-            
+
             System.out.print("Name: ");
             String name = scanner.nextLine();
-            
+
             System.out.print("Age: ");
             int age = scanner.nextInt();
             scanner.nextLine();
-            
+
             System.out.print("Email: ");
             String email = scanner.nextLine();
-            
+
             System.out.print("Major: ");
             String major = scanner.nextLine();
-            
+
             System.out.print("GPA (0.0-4.0): ");
             double gpa = scanner.nextDouble();
             scanner.nextLine();
-            
+
             Student student = new Student(id, name, age, email, major, gpa);
-            
+
             if (studentDAO.addStudent(student)) {
                 System.out.println("✓ Student added successfully!");
             } else {
                 System.out.println("✗ Failed to add student.");
             }
-            
+
         } catch (Exception e) {
             System.out.println("✗ Invalid input! " + e.getMessage());
             scanner.nextLine();
         }
     }
-    
+
     public void viewAllStudents() {
         System.out.println("\n--- All Students ---");
         List<Student> students = studentDAO.getAllStudents();
-        
+
         if (students.isEmpty()) {
             System.out.println("No students found.");
         } else {
             System.out.printf("%-10s %-20s %-5s %-25s %-20s %-5s\n",
-                "ID", "Name", "Age", "Email", "Major", "GPA");
+                    "ID", "Name", "Age", "Email", "Major", "GPA");
             System.out.println("-".repeat(95));
-            
+
             for (Student student : students) {
                 System.out.printf("%-10s %-20s %-5d %-25s %-20s %.2f\n",
-                    student.getStudentId(),
-                    student.getName(),
-                    student.getAge(),
-                    student.getEmail(),
-                    student.getMajor(),
-                    student.getGpa());
+                        student.getStudentId(),
+                        student.getName(),
+                        student.getAge(),
+                        student.getEmail(),
+                        student.getMajor(),
+                        student.getGpa());
             }
             System.out.println("-".repeat(95));
             System.out.println("Total students: " + students.size());
         }
     }
-    
+
     public void findStudentById() {
         System.out.println("\n--- Find Student by ID ---");
         System.out.print("Enter Student ID: ");
         String id = scanner.nextLine();
-        
+
         Student student = studentDAO.getStudentById(id);
-        
+
         if (student != null) {
             System.out.println("\n✓ Student Found:");
             displayStudentDetails(student);
@@ -896,97 +904,97 @@ public class StudentManagementApp {
             System.out.println("✗ Student not found.");
         }
     }
-    
+
     public void findStudentsByMajor() {
         System.out.println("\n--- Find Students by Major ---");
         System.out.print("Enter Major: ");
         String major = scanner.nextLine();
-        
+
         List<Student> students = studentDAO.getStudentsByMajor(major);
-        
+
         if (students.isEmpty()) {
             System.out.println("No students found in " + major);
         } else {
             System.out.println("\n" + major + " Students:");
             for (int i = 0; i < students.size(); i++) {
                 System.out.printf("%d. %s (GPA: %.2f)\n",
-                    i + 1, students.get(i).getName(), students.get(i).getGpa());
+                        i + 1, students.get(i).getName(), students.get(i).getGpa());
             }
             System.out.println("\nTotal: " + students.size());
         }
     }
-    
+
     public void viewHonorRoll() {
         System.out.println("\n--- Honor Roll (GPA >= 3.5) ---");
         List<Student> honorStudents = studentDAO.getHonorRollStudents(3.5);
-        
+
         if (honorStudents.isEmpty()) {
             System.out.println("No students on honor roll.");
         } else {
             for (int i = 0; i < honorStudents.size(); i++) {
                 Student s = honorStudents.get(i);
                 System.out.printf("%d. %s (%s) - GPA: %.2f\n",
-                    i + 1, s.getName(), s.getMajor(), s.getGpa());
+                        i + 1, s.getName(), s.getMajor(), s.getGpa());
             }
             System.out.println("\nTotal: " + honorStudents.size());
         }
     }
-    
+
     public void updateGPA() {
         System.out.println("\n--- Update Student GPA ---");
         System.out.print("Enter Student ID: ");
         String id = scanner.nextLine();
-        
+
         Student student = studentDAO.getStudentById(id);
         if (student == null) {
             System.out.println("✗ Student not found.");
             return;
         }
-        
+
         System.out.println("Current GPA: " + student.getGpa());
         System.out.print("Enter new GPA (0.0-4.0): ");
-        
+
         try {
             double newGpa = scanner.nextDouble();
             scanner.nextLine();
-            
+
             if (newGpa < 0.0 || newGpa > 4.0) {
                 System.out.println("✗ GPA must be between 0.0 and 4.0");
                 return;
             }
-            
+
             if (studentDAO.updateGPA(id, newGpa)) {
                 System.out.println("✓ GPA updated successfully!");
             } else {
                 System.out.println("✗ Failed to update GPA.");
             }
-            
+
         } catch (Exception e) {
             System.out.println("✗ Invalid input!");
             scanner.nextLine();
         }
     }
-    
+
     public void updateStudentInfo() {
         System.out.println("\n--- Update Student Information ---");
         System.out.print("Enter Student ID: ");
         String id = scanner.nextLine();
-        
+
         Student student = studentDAO.getStudentById(id);
         if (student == null) {
             System.out.println("✗ Student not found.");
             return;
         }
-        
+
         System.out.println("\nCurrent Information:");
         displayStudentDetails(student);
-        
+
         System.out.println("\nEnter new information (press Enter to keep current):");
-        
+
         System.out.print("Name [" + student.getName() + "]: ");
         String name = scanner.nextLine();
         if (!name.isEmpty()) student.setName(name);
-        
+
         System.out.print("Age [" + student.getAge() + "]: ");
         String ageStr = scanner.nextLine();
         if (!ageStr.isEmpty()) {
@@ -996,15 +1004,15 @@ public class StudentManagementApp {
                 System.out.println("Invalid age, keeping current value.");
             }
         }
-        
+
         System.out.print("Email [" + student.getEmail() + "]: ");
         String email = scanner.nextLine();
         if (!email.isEmpty()) student.setEmail(email);
-        
+
         System.out.print("Major [" + student.getMajor() + "]: ");
         String major = scanner.nextLine();
         if (!major.isEmpty()) student.setMajor(major);
-        
+
         System.out.print("GPA [" + student.getGpa() + "]: ");
         String gpaStr = scanner.nextLine();
         if (!gpaStr.isEmpty()) {
@@ -1014,31 +1022,31 @@ public class StudentManagementApp {
                 System.out.println("Invalid GPA, keeping current value.");
             }
         }
-        
+
         if (studentDAO.updateStudent(student)) {
             System.out.println("✓ Student information updated successfully!");
         } else {
             System.out.println("✗ Failed to update student.");
         }
     }
-    
+
     public void deleteStudent() {
         System.out.println("\n--- Delete Student ---");
         System.out.print("Enter Student ID: ");
         String id = scanner.nextLine();
-        
+
         Student student = studentDAO.getStudentById(id);
         if (student == null) {
             System.out.println("✗ Student not found.");
             return;
         }
-        
+
         System.out.println("\nStudent to delete:");
         displayStudentDetails(student);
-        
+
         System.out.print("\nAre you sure? (yes/no): ");
         String confirm = scanner.nextLine();
-        
+
         if (confirm.equalsIgnoreCase("yes")) {
             if (studentDAO.deleteStudent(id)) {
                 System.out.println("✓ Student deleted successfully!");
@@ -1049,26 +1057,26 @@ public class StudentManagementApp {
             System.out.println("Deletion cancelled.");
         }
     }
-    
+
     public void viewStatistics() {
         System.out.println("\n╔══════════════════════════════════════╗");
         System.out.println("║         SYSTEM STATISTICS            ║");
         System.out.println("╚══════════════════════════════════════╝");
-        
+
         int totalStudents = studentDAO.getStudentCount();
         double avgGpa = studentDAO.getAverageGPA();
         int honorRollCount = studentDAO.getHonorRollStudents(3.5).size();
-        
+
         System.out.println("Total Students: " + totalStudents);
         System.out.printf("Average GPA: %.2f\n", avgGpa);
         System.out.println("Honor Roll Students: " + honorRollCount);
-        
+
         if (totalStudents > 0) {
             double honorPercentage = (honorRollCount * 100.0) / totalStudents;
             System.out.printf("Honor Roll Percentage: %.1f%%\n", honorPercentage);
         }
     }
-    
+
     private void displayStudentDetails(Student student) {
         System.out.println("─".repeat(40));
         System.out.println("Student ID: " + student.getStudentId());
@@ -1079,13 +1087,13 @@ public class StudentManagementApp {
         System.out.printf("GPA: %.2f\n", student.getGpa());
         System.out.println("─".repeat(40));
     }
-    
+
     public void run() {
         System.out.println("╔════════════════════════════════════════╗");
         System.out.println("║  Welcome to Student Management System  ║");
         System.out.println("║          Connected to PostgreSQL       ║");
         System.out.println("╚════════════════════════════════════════╝");
-        
+
         // Test database connection
         try {
             DatabaseConfig.getConnection().close();
@@ -1095,25 +1103,43 @@ public class StudentManagementApp {
             System.out.println("Please check your database configuration.\n");
             return;
         }
-        
+
         int choice;
         do {
             displayMenu();
-            
+
             try {
                 choice = scanner.nextInt();
                 scanner.nextLine();
-                
+
                 switch (choice) {
-                    case 1: addStudent(); break;
-                    case 2: viewAllStudents(); break;
-                    case 3: findStudentById(); break;
-                    case 4: findStudentsByMajor(); break;
-                    case 5: viewHonorRoll(); break;
-                    case 6: updateGPA(); break;
-                    case 7: updateStudentInfo(); break;
-                    case 8: deleteStudent(); break;
-                    case 9: viewStatistics(); break;
+                    case 1:
+                        addStudent();
+                        break;
+                    case 2:
+                        viewAllStudents();
+                        break;
+                    case 3:
+                        findStudentById();
+                        break;
+                    case 4:
+                        findStudentsByMajor();
+                        break;
+                    case 5:
+                        viewHonorRoll();
+                        break;
+                    case 6:
+                        updateGPA();
+                        break;
+                    case 7:
+                        updateStudentInfo();
+                        break;
+                    case 8:
+                        deleteStudent();
+                        break;
+                    case 9:
+                        viewStatistics();
+                        break;
                     case 10:
                         System.out.println("\nThank you for using the system!");
                         System.out.println("Goodbye!");
@@ -1121,18 +1147,18 @@ public class StudentManagementApp {
                     default:
                         System.out.println("✗ Invalid choice! Please enter 1-10.");
                 }
-                
+
             } catch (Exception e) {
                 System.out.println("✗ Invalid input!");
                 scanner.nextLine();
                 choice = 0;
             }
-            
+
         } while (choice != 10);
-        
+
         scanner.close();
     }
-    
+
     public static void main(String[] args) {
         StudentManagementApp app = new StudentManagementApp();
         app.run();
@@ -1224,7 +1250,10 @@ pstmt.setString(1, value);  // CORRECT
 ```
 
 ### Error 6: Resource Leak
+
 ```java
+import Demo.DatabaseConfig;
+
 Connection conn = DatabaseConfig.getConnection();
 // ... use connection ...
 // Forgot to close! Memory leak!
@@ -1506,25 +1535,27 @@ public class InsertStudent {
 **Example 4: Updating Student Data**
 
 ```java
+import Demo.DatabaseConfig;
+
 public class UpdateStudent {
-    
+
     // Update student's GPA
     public static boolean updateStudentGPA(String studentId, double newGpa) {
         Connection connection = null;
         PreparedStatement pstmt = null;
-        
+
         try {
             connection = DatabaseConfig.getConnection();
-            
+
             String sql = "UPDATE students SET gpa = ? WHERE student_id = ?";
             pstmt = connection.prepareStatement(sql);
-            
+
             // Set parameters (order matters!)
             pstmt.setDouble(1, newGpa);
             pstmt.setString(2, studentId);
-            
+
             int rowsAffected = pstmt.executeUpdate();
-            
+
             if (rowsAffected > 0) {
                 System.out.println("✓ GPA updated successfully!");
                 return true;
@@ -1532,7 +1563,7 @@ public class UpdateStudent {
                 System.out.println("✗ Student not found with ID: " + studentId);
                 return false;
             }
-            
+
         } catch (SQLException e) {
             System.out.println("✗ Error updating GPA: " + e.getMessage());
             return false;
@@ -1540,24 +1571,24 @@ public class UpdateStudent {
             DatabaseConfig.closeResources(connection, pstmt, null);
         }
     }
-    
+
     // Update multiple columns
     public static boolean updateStudentInfo(String studentId, String newEmail, String newMajor) {
         Connection connection = null;
         PreparedStatement pstmt = null;
-        
+
         try {
             connection = DatabaseConfig.getConnection();
-            
+
             String sql = "UPDATE students SET email = ?, major = ? WHERE student_id = ?";
             pstmt = connection.prepareStatement(sql);
-            
+
             pstmt.setString(1, newEmail);
             pstmt.setString(2, newMajor);
             pstmt.setString(3, studentId);
-            
+
             int rowsAffected = pstmt.executeUpdate();
-            
+
             if (rowsAffected > 0) {
                 System.out.println("✓ Student information updated!");
                 return true;
@@ -1565,7 +1596,7 @@ public class UpdateStudent {
                 System.out.println("✗ Student not found.");
                 return false;
             }
-            
+
         } catch (SQLException e) {
             System.out.println("✗ Error: " + e.getMessage());
             return false;
@@ -1573,7 +1604,7 @@ public class UpdateStudent {
             DatabaseConfig.closeResources(connection, pstmt, null);
         }
     }
-    
+
     public static void main(String[] args) {
         // Test UPDATE operations
         updateStudentGPA("S001", 3.9);
@@ -1598,45 +1629,47 @@ Always use WHERE clause unless you intend to update all rows!
 **Example 5: Deleting Records**
 
 ```java
+import Demo.DatabaseConfig;
+
 public class DeleteStudent {
-    
+
     public static boolean deleteStudent(String studentId) {
         Connection connection = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
-        
+
         try {
             connection = DatabaseConfig.getConnection();
-            
+
             // First, check if student exists and get name
             String checkSql = "SELECT name FROM students WHERE student_id = ?";
             pstmt = connection.prepareStatement(checkSql);
             pstmt.setString(1, studentId);
             rs = pstmt.executeQuery();
-            
+
             if (!rs.next()) {
                 System.out.println("✗ Student not found with ID: " + studentId);
                 return false;
             }
-            
+
             String studentName = rs.getString("name");
             rs.close();
             pstmt.close();
-            
+
             // Now delete the student
             String deleteSql = "DELETE FROM students WHERE student_id = ?";
             pstmt = connection.prepareStatement(deleteSql);
             pstmt.setString(1, studentId);
-            
+
             int rowsAffected = pstmt.executeUpdate();
-            
+
             if (rowsAffected > 0) {
                 System.out.println("✓ Student '" + studentName + "' deleted successfully!");
                 return true;
             } else {
                 return false;
             }
-            
+
         } catch (SQLException e) {
             // Handle foreign key constraint errors
             if (e.getMessage().contains("foreign key")) {
@@ -1650,24 +1683,24 @@ public class DeleteStudent {
             DatabaseConfig.closeResources(connection, pstmt, rs);
         }
     }
-    
+
     // Delete students by condition (be careful!)
     public static int deleteStudentsByGPA(double maxGpa) {
         Connection connection = null;
         PreparedStatement pstmt = null;
-        
+
         try {
             connection = DatabaseConfig.getConnection();
-            
+
             String sql = "DELETE FROM students WHERE gpa < ?";
             pstmt = connection.prepareStatement(sql);
             pstmt.setDouble(1, maxGpa);
-            
+
             int rowsDeleted = pstmt.executeUpdate();
-            
+
             System.out.println("✓ Deleted " + rowsDeleted + " students with GPA < " + maxGpa);
             return rowsDeleted;
-            
+
         } catch (SQLException e) {
             System.out.println("✗ Error: " + e.getMessage());
             return 0;
@@ -1675,11 +1708,11 @@ public class DeleteStudent {
             DatabaseConfig.closeResources(connection, pstmt, null);
         }
     }
-    
+
     public static void main(String[] args) {
         // Delete a specific student
         deleteStudent("S010");
-        
+
         // Be VERY careful with this type of deletion!
         // deleteStudentsByGPA(2.0);  // Deletes all students with GPA < 2.0
     }
