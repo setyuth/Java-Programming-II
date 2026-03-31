@@ -1,0 +1,12 @@
+# Server port (default is 8080 — change if something else is already using it)
+server:
+  port: 8080
+  
+  # Application name (shows in logs)
+spring:
+  application:
+    name: week9-api
+  
+  # Show more detailed startup logs
+logging:
+  level.org.springframework.web: DEBUG
