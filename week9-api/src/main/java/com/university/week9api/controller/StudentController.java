@@ -152,27 +152,34 @@ public class StudentController {
     @PostMapping
     public ResponseEntity<ApiResponse> addStudent(@RequestBody Student student) {
 
-        // Validate required fields
-        if (student.getName() == null || student.getName().isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(ApiResponse.error("Student name is required."));
-        }
-        if (student.getMajor() == null || student.getMajor().isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(ApiResponse.error("Student major is required."));
-        }
-        if (student.getGpa() < 0.0 || student.getGpa() > 4.0) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(ApiResponse.error("GPA must be between 0.0 and 4.0."));
-        }
+        try {
 
-        // Assign the next ID automatically
-        student.setId(nextId++);
-        students.add(student);
+            // Validate required fields
 
-        // Return 201 Created with the newly added student
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.ok("Student added successfully!", student));
+            if (student.getName() == null || student.getName().isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(ApiResponse.error("Student name is required."));
+            }
+            if (student.getMajor() == null || student.getMajor().isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(ApiResponse.error("Student major is required."));
+            }
+            if (student.getGpa() < 0.0 || student.getGpa() > 4.0) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(ApiResponse.error("GPA must be between 0.0 and 4.0."));
+            }
+
+            // Assign the next ID automatically
+            student.setId(nextId++);
+            students.add(student);
+
+            // Return 201 Created with the newly added student
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(ApiResponse.ok("Student added successfully!", student));
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
 
     // ════════════════════════════════════════════════════════════════════════
